@@ -141,4 +141,4 @@ DJOSER = {
     },
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://buyfood.ddns.net/']
+CSRF_TRUSTED_ORIGINS = ["https://buyfood.ddns.net"]
