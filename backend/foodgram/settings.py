@@ -100,7 +100,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
@@ -108,7 +108,7 @@ CSV_FILES = BASE_DIR / 'static/data'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -125,7 +125,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 6,
 
 }
-
 
 DJOSER = {
     'HIDE_USERS': False,
