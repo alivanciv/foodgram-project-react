@@ -117,9 +117,9 @@ class RecipeViewSet(ModelViewSet):
         ingredients = ';\n'.join(
             [
                 '{} - {} {}'.format(
-                 position['ingredient__name'],
-                 position['total_amount'],
-                 position['ingredient__measurement_unit'])
+                    position['ingredient__name'],
+                    position['total_amount'],
+                    position['ingredient__measurement_unit'])
                 for position in order_data
             ]
         )

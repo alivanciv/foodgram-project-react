@@ -145,9 +145,10 @@ class RecipeIngredient(models.Model):
 
     def __str__(self):
         return ('{} - {} {}'.format(
-                 self.ingredient,
-                 self.amount,
-                 self.ingredient.measurement_unit))
+            self.ingredient,
+            self.amount,
+            self.ingredient.measurement_unit)
+        )
 
 
 class RecipeFavorite(models.Model):
