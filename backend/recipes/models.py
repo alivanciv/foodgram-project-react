@@ -67,7 +67,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Фото',
-        upload_to='media/recipes_images',
+        upload_to='recipes_images',
         blank=False,
         null=False
     )

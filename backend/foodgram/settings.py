@@ -7,7 +7,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['buyfood.ddns.net']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
