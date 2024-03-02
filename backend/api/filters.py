@@ -1,5 +1,4 @@
 from django.db.models import Subquery, OuterRef, Prefetch
-
 import django_filters
 
 from recipes.models import Recipe, Ingredient, RecipeFavorite, ShoppingCart

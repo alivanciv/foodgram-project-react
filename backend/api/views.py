@@ -1,8 +1,7 @@
+from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Count
-from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-
 from djoser.views import UserViewSet as BaseUserViewSet
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response

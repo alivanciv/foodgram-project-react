@@ -1,8 +1,12 @@
 import base64
-from django.core.validators import MinValueValidator
-from django.core.files.base import ContentFile
-from django.contrib.auth import get_user_model
 
+from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
+from django.core.validators import MinValueValidator
+from djoser.serializers import (
+    UserSerializer as BaseUserSerializer,
+    UserCreateSerializer as BaseUserCreateSerializer
+)
 from rest_framework.serializers import (
     ModelSerializer,
     PrimaryKeyRelatedField,
@@ -13,11 +17,6 @@ from rest_framework.serializers import (
     ReadOnlyField,
     ValidationError
 )
-from djoser.serializers import (
-    UserSerializer as BaseUserSerializer,
-    UserCreateSerializer as BaseUserCreateSerializer
-)
-
 from recipes.models import (
     Recipe,
     Ingredient,
