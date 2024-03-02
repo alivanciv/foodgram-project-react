@@ -140,3 +140,5 @@ DJOSER = {
         'user': ['rest_framework.permissions.AllowAny'],
     },
 }
+
+CSRF_TRUSTED_ORIGINS = ['https://buyfood.ddns.net/']
