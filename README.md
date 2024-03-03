@@ -8,6 +8,9 @@
 
 **Проект Foodgram доступен по ссылке** | [buyfood.3utilities.com]
 
+Логин: alivanciv
+Пароль: alivanciv
+
 
 ## Технологии
  - django v3.2
