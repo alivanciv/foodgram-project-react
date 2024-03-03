@@ -99,7 +99,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./
-          dockerfile: ./infrar/Dockerfile
+          file: ./infra/Dockerfile
           push: true
           tags: alivantsiv/foodgram_gateway:latest
   deploy:
