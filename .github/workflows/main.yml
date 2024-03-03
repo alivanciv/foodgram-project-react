@@ -98,7 +98,7 @@ jobs:
       - name: Push to DockerHub
         uses: docker/build-push-action@v4
         with:
-          context: ./infra/
+          context: ./
           push: true
           tags: alivantsiv/foodgram_gateway:latest
   deploy:
