@@ -6,7 +6,10 @@
 
 ## Домен приложения:
 
-**Проект Foodgram доступен по ссылке** | [buyfood.3utilities.com]
+**Проект Foodgram доступен по ссылке** | [buyfood.ddns.net](https://buyfood.ddns.net)
+
+Логин: alivanciv
+Пароль: alivanciv
 
 
 ## Технологии
