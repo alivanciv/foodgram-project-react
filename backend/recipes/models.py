@@ -49,6 +49,14 @@ class Ingredient(models.Model):
         ordering = ('name',)
         verbose_name = 'ингредиент'
         verbose_name_plural = 'Ингредиенты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=('name', 'measurement_unit'),
+                name='unique_ingredient_units',
+                violation_error_message='Вы уже создавали ингредиент '
+                                        'с такими ед.изм.'
+            )
+        ]
 
     def __str__(self):
         return self.name[:MAX_TEXT_LENGTH]
