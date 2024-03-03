@@ -1,5 +1,5 @@
 FROM nginx:1.22.1
-WORKDIR /app
+RUN ..
 COPY ./infra/nginx.conf /etc/nginx/templates/default.conf.template
 COPY ./infra/nginx.conf /etc/nginx/conf.d
 COPY ./frontend/build /usr/share/nginx/html/
