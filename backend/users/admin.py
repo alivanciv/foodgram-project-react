@@ -24,27 +24,17 @@ class UserAdmin(admin.ModelAdmin):
 class FollowAdmin(admin.ModelAdmin):
     """Follow information"""
 
-    list_display = ('user', 'get_followings',
-                    'get_followers', 'get_followers_count')
+    list_display = ('user', 'author', 'get_subs')
     list_display_links = ('user', )
     list_filter = ('user', )
     search_fields = ['user']
     empty_value_display = '-пусто-'
 
     @admin.display(description='Подписки')
-    def get_followings(self, obj):
-        followings_set = obj.follower.all()
-        data = [f'{following.firs_name} {following.last_name}'
-                for following in followings_set]
+    def get_subs(self, obj):
+        subs = (
+            User.objects
+            .filter(following__user=obj.user)
+        )
+        data = [sub.first_name for sub in subs]
         return format_html('<br/>'.join(data))
-
-    @admin.display(description='Подписчики')
-    def get_followers(self, obj):
-        followers_set = obj.following.all()
-        data = [f'{follower.firs_name} {follower.last_name}'
-                for follower in followers_set]
-        return format_html('<br/>'.join(data))
-
-    @admin.display(description='Кол-во подписчиков')
-    def get_followers_count(self, obj):
-        return obj.following.all().count()

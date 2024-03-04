@@ -75,32 +75,22 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Фото',
-        upload_to='recipes_images',
-        blank=False,
-        null=False
+        upload_to='recipes_images'
     )
-    text = models.TextField(
-        'Описание',
-        blank=False,
-        null=False
-    )
+    text = models.TextField('Описание')
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
         verbose_name='Ингредиенты',
-        related_name='recipes',
-        blank=False
+        related_name='recipes'
     )
     tags = models.ManyToManyField(
         Tag,
         verbose_name='Теги',
-        related_name='recipes',
-        blank=False
+        related_name='recipes'
     )
-    cooking_time = models.IntegerField(
+    cooking_time = models.PositiveIntegerField(
         'Время приготовления',
-        blank=False,
-        null=False,
         validators=[MinValueValidator(1, 'Время должно быть больше 0')],
         help_text='Введите время в минутах'
     )
@@ -133,10 +123,8 @@ class RecipeIngredient(models.Model):
         verbose_name='Ингредиент',
         related_name='composes'
     )
-    amount = models.IntegerField(
+    amount = models.PositiveIntegerField(
         'Количество',
-        blank=False,
-        null=False,
         validators=[MinValueValidator(1)]
     )
 
@@ -144,7 +132,7 @@ class RecipeIngredient(models.Model):
         ordering = ('ingredient__name',)
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'ingredient'],
+                fields=('recipe', 'ingredient'),
                 name='unique_composition'
             )
         ]
@@ -175,7 +163,7 @@ class RecipeFavorite(models.Model):
         ordering = ('-created_at',)
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'recipe'],
+                fields=('user', 'recipe'),
                 name='unique_user_favorite_recipe',
             )
         ]
@@ -197,7 +185,7 @@ class ShoppingCart(models.Model):
         ordering = ('-created_at',)
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'recipe'],
+                fields=('user', 'recipe'),
                 name='unique_user_recipe_to_buy'
             )
         ]

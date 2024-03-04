@@ -93,7 +93,6 @@ class RecipeSerializer(ModelSerializer):
     )
     ingredients = RecipeIngredientSerializer(source='contents', many=True)
     tags = TagSerializer(many=True)
-    # image = Base64ImageField()
     image = SerializerMethodField('get_image_url', read_only=True)
     is_favorited = SerializerMethodField('get_is_favorited')
     is_in_shopping_cart = SerializerMethodField('get_is_in_shopping_cart')
@@ -168,27 +167,39 @@ class CreateRecipeSerializer(ModelSerializer):
         fields = ('id', 'tags', 'author', 'ingredients',
                   'name', 'image', 'text', 'cooking_time')
 
-    # def to_representation(self, instance):
-    #     return RecipeSerializer.to_representation(self, instance)
+    def to_representation(self, instance):
+        serializer = RecipeSerializer(
+            instance,
+            context=self.context
+        )
+        return serializer.data
 
     def validate(self, data):
         if not data.get('tags'):
-            raise ValidationError('Необходимо указать хотя бы '
-                                  'один тег для ингредиента!')
+            raise ValidationError('Необходимо указать теги!')
         if not data.get('ingredients'):
             raise ValidationError('Необходимо внести ингредиенты!')
         return data
 
     def validate_tags(self, value):
+        if not value:
+            raise ValidationError('Необходимо указать хотя бы '
+                                  'один тег для ингредиента!')
         if len(value) != len(set(value)):
             raise ValidationError('Теги рецепта '
                                   'должны быть уникальны')
         return value
 
     def validate_ingredients(self, value):
+        if not value:
+            raise ValidationError('Необходимо внести хотя бы '
+                                  'один ингредиент!')
         id_list = []
         for ingredient in value:
             id_list.append(ingredient.get('id'))
+            if not ingredient.get('amount'):
+                raise ValidationError('Укажите количество '
+                                      f'ингредиента {ingredient}')
         if len(id_list) != len(set(id_list)):
             raise ValidationError('Ингредиенты рецепта '
                                   'должны быть уникальны')

@@ -50,7 +50,7 @@ class IngredientViewSet(ReadCreateDeleteModelViewSet):
 
 
 class RecipeViewSet(ModelViewSet):
-    http_method_names = ['get', 'post', 'patch', 'put', 'delete']
+    http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = (IsOwner | IsAdminOrReadOnly,)
@@ -63,12 +63,10 @@ class RecipeViewSet(ModelViewSet):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user)
 
     def perform_update(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user)
 
     @action(detail=True, methods=['post', 'delete'],
             url_path='favorite',
@@ -101,13 +99,13 @@ class RecipeViewSet(ModelViewSet):
         user = request.user.id
         recipes = ShoppingCart.objects.filter(user=user).values(
             'recipe_id', 'recipe__name')
-        order_data = RecipeIngredient.objects.filter(
-            recipe_id__in=recipes.values('recipe_id')).select_related(
-                'ingredient').order_by(
-                    'ingredient__name').values(
-                        'ingredient__name',
-                        'ingredient__measurement_unit').annotate(
-                            total_amount=Sum('amount')
+        order_data = (
+            RecipeIngredient.objects
+            .filter(recipe_id__in=recipes.values('recipe_id'))
+            .select_related('ingredient')
+            .order_by('ingredient__name')
+            .values('ingredient__name', 'ingredient__measurement_unit')
+            .annotate(total_amount=Sum('amount'))
         )
         ordered_recipes = ', '.join(
             [
@@ -142,9 +140,9 @@ class UserViewSet(BaseUserViewSet):
 
     def get_queryset(self):
         if self.action in ('subscriptions'):
-            return User.objects.filter(
-                id__in=Follow.objects.filter(
-                    user=self.request.user).values('author_id')
+            return (
+                User.objects
+                .filter(following__user=self.request.user)
             )
         return super(UserViewSet, self).get_queryset()
 
@@ -163,16 +161,24 @@ class UserViewSet(BaseUserViewSet):
             permission_classes=[IsAuthenticated])
     def subscriptions(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset.annotate(
-            recipes_count=Count('recipes')).order_by('follower__created_at')
+        queryset = (
+            queryset
+            .annotate(recipes_count=Count('recipes'))
+            .order_by('follower__created_at')
+        )
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = SubscriptionsSerializer(
-                page, many=True, context={'request': request}
+                page,
+                many=True,
+                context={'request': request}
             )
             return self.get_paginated_response(serializer.data)
         serializer = SubscriptionsSerializer(
-            queryset, many=True, context={'request': request})
+            queryset,
+            many=True,
+            context={'request': request}
+        )
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
     @action(detail=True, methods=['post', 'delete'], url_path='subscribe',

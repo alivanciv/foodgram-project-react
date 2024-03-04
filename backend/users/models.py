@@ -62,7 +62,11 @@ class Follow(models.Model):
         ordering = ('-created_at',)
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'author'],
+                fields=('user', 'author'),
                 name='unique_follow'
-            )
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('author')),
+                name="self_subscription",
+            ),
         ]

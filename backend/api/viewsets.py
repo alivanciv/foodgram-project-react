@@ -3,10 +3,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 
 
-class ReadCreateDeleteModelViewSet(mixins.CreateModelMixin,
-                                   mixins.ListModelMixin,
+class ReadCreateDeleteModelViewSet(mixins.ListModelMixin,
                                    mixins.RetrieveModelMixin,
-                                   mixins.DestroyModelMixin,
                                    GenericViewSet):
 
     http_method_names = ['get']

@@ -7,21 +7,10 @@ from .utils import list_related_recipes
 
 User = get_user_model()
 
-CHOICES = (
-    ('breakfast', 'breakfast'),
-    ('launch', 'launch'),
-    ('dinner', 'dinner'),
-)
-
 
 class RecipeFilter(django_filters.FilterSet):
-    tags = django_filters.MultipleChoiceFilter(
-        choices=CHOICES,
+    tags = django_filters.AllValuesMultipleFilter(
         field_name='tags__slug',
-        lookup_expr='exact'
-    )
-    author = django_filters.NumberFilter(
-        field_name='author__id',
         lookup_expr='exact'
     )
     is_favorited = django_filters.NumberFilter(
@@ -67,14 +56,15 @@ class UserRecipeFilter(django_filters.FilterSet):
 
     def get_recipes_limit(self, queryset, name, value):
         recipe_sq = Subquery(
-            Recipe.objects.filter(
-                author__id=OuterRef('id')
-            ).values('id')[:value]
+            Recipe.objects
+            .filter(author__id=OuterRef('id'))
+            .values('id')[:value]
         )
         user_sq = Subquery(
-            queryset.filter(
-                recipes__id__in=recipe_sq
-            ).values_list('recipes__id'))
+            queryset
+            .filter(recipes__id__in=recipe_sq)
+            .values_list('recipes__id')
+        )
         return queryset.prefetch_related(
             Prefetch(
                 'recipes',
