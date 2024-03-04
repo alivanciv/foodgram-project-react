@@ -186,8 +186,6 @@ class CreateRecipeSerializer(ModelSerializer):
         return data
 
     def validate_tags(self, value):
-        if not self.initial_data.get('tags'):
-            raise ValidationError('Необходимо указать теги!')
         if not value:
             raise ValidationError('Необходимо указать хотя бы '
                                   'один тег для ингредиента!')
