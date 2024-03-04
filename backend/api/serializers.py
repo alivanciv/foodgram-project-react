@@ -152,13 +152,17 @@ class CreateRecipeSerializer(ModelSerializer):
     author = UserSerializer(
         read_only=True, default=CurrentUserDefault()
     )
-    ingredients = CreateRecipeIngredientSerializer(many=True)
+    ingredients = CreateRecipeIngredientSerializer(
+        many=True,
+        required=True
+    )
     image = Base64ImageField(max_length=None, use_url=True)
     tags = PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True,
+        required=True,
         error_messages={
-            'does_not_exist': 'Тег не найден!',
+            'does_not_exist': 'Тег не найден!'
         }
     )
 
@@ -182,6 +186,8 @@ class CreateRecipeSerializer(ModelSerializer):
         return data
 
     def validate_tags(self, value):
+        if not self.initial_data.get('tags'):
+            raise ValidationError('Необходимо указать теги!')
         if not value:
             raise ValidationError('Необходимо указать хотя бы '
                                   'один тег для ингредиента!')
