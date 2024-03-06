@@ -17,13 +17,15 @@ services:
     volumes:
       - static:/app/static/
       - media:/app/media/
+      - docs:/app/api/docs/
     depends_on:
       - db
   frontend:
     image: alivantsiv/foodgram_frontend:latest
     env_file: .env
+    command: cp -r /app/result_build/. /frontend_static/
     volumes:
-      - ./frontend/:/app/result_build/
+      - frontend_static:/frontend_static
     depends_on:
       - backend
   nginx:
@@ -34,5 +36,7 @@ services:
     volumes:
       - static:/var/html/static/
       - media:/var/html/media/
+      - frontend_static:/usr/share/nginx/html/
+      - docs:/usr/share/nginx/html/api/docs/
     depends_on:
       - backend

@@ -84,7 +84,6 @@ jobs:
           tags: alivantsiv/foodgram_frontend:latest
   build_gateway_and_push_to_docker_hub:
     name: Push gateway Docker image to DockerHub
-    needs: build_frontend_and_push_to_docker_hub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -99,8 +98,7 @@ jobs:
       - name: Push to DockerHub
         uses: docker/build-push-action@v4
         with:
-          context: ../
-          file: ./infra/Dockerfile
+          context: ./gateway/
           push: true
           tags: alivantsiv/foodgram_gateway:latest
   deploy:
