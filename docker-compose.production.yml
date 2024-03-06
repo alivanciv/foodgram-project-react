@@ -27,7 +27,7 @@ services:
       - static:/frontend_static
     depends_on:
       - backend
-  nginx:
+  gateway:
     image: alivantsiv/foodgram_gateway:latest
     env_file: .env
     ports:
