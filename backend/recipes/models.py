@@ -5,8 +5,7 @@ from django.contrib.auth import get_user_model
 from recipes.constants import (
     MAX_TEXT_LENGTH,
     MAX_NAME_LENGTH,
-    MAX_COLOR_LENGTH,
-    TAG_CHOICES,
+    MAX_COLOR_LENGTH
 )
 
 User = get_user_model()
@@ -16,7 +15,6 @@ class Tag(models.Model):
     name = models.CharField(
         'Тег',
         max_length=MAX_NAME_LENGTH,
-        choices=TAG_CHOICES,
         unique=True
     )
     color = models.CharField(

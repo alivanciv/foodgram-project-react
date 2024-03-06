@@ -28,6 +28,7 @@ services:
       - backend
   nginx:
     image: alivantsiv/foodgram_gateway:latest
+    env_file: .env
     ports:
       - "8000:80"
     volumes:

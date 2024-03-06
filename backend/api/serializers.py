@@ -188,10 +188,10 @@ class CreateRecipeSerializer(ModelSerializer):
     def validate_tags(self, value):
         if not value:
             raise ValidationError('Необходимо указать хотя бы '
-                                  'один тег для ингредиента!')
+                                  'один тег для рецепта!')
         if len(value) != len(set(value)):
             raise ValidationError('Теги рецепта '
-                                  'должны быть уникальны')
+                                  'должны быть уникальны.')
         return value
 
     def validate_ingredients(self, value):
@@ -203,10 +203,10 @@ class CreateRecipeSerializer(ModelSerializer):
             id_list.append(ingredient.get('id'))
             if not ingredient.get('amount'):
                 raise ValidationError('Укажите количество '
-                                      f'ингредиента {ingredient}')
+                                      f'ингредиента {ingredient}.')
         if len(id_list) != len(set(id_list)):
             raise ValidationError('Ингредиенты рецепта '
-                                  'должны быть уникальны')
+                                  'должны быть уникальны.')
         return value
 
     def create(self, validated_data):
@@ -223,7 +223,7 @@ class CreateRecipeSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         ingredients = validated_data.pop('ingredients')
-        instance.contents.all().delete()
+        instance.ingredients.clear()
         tags = validated_data.pop('tags')
         instance.tags.clear()
         for ingredient in ingredients:
@@ -232,7 +232,7 @@ class CreateRecipeSerializer(ModelSerializer):
                 amount=ingredient['amount']
             )
         instance.tags.set(tags)
-        super().update(instance, validated_data)
+        # super().update(instance, validated_data)
         return instance
 
 
