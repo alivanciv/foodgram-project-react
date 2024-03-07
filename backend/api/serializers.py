@@ -77,13 +77,13 @@ class Base64ImageField(ImageField):
 
 
 class RecipeIngredientSerializer(ModelSerializer):
-    id = PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+    id = IntegerField(source='ingredient.id')
     name = ReadOnlyField(source='ingredient.name')
     measurement_unit = ReadOnlyField(source='ingredient.measurement_unit')
     amount = IntegerField()
 
     class Meta:
-        model = RecipeIngredient
+        model = Ingredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
@@ -227,12 +227,12 @@ class CreateRecipeSerializer(ModelSerializer):
         tags = validated_data.pop('tags')
         instance.tags.clear()
         for ingredient in ingredients:
-            instance.contents.create(
-                ingredient=ingredient['id'],
-                amount=ingredient['amount']
+            instance.ingredients.add(
+                ingredient['id'],
+                through_defaults={'amount': ingredient['amount']}
             )
         instance.tags.set(tags)
-        # super().update(instance, validated_data)
+        super().update(instance, validated_data)
         return instance
 
 
