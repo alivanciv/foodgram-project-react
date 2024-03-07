@@ -12,7 +12,8 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   backend:
-    build: ./backend
+    build:
+      context: ./frontend
     env_file: .env
     volumes:
       - static:/app/static/
@@ -23,18 +24,21 @@ services:
     build:
       context: ./frontend
     env_file: .env
-    command: cp -r /app/result_build/. /frontend_static/
+    command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static
     depends_on:
       - backend
   gateway:
-    image: nginx:1.22.1
+    build:
+      context: ./frontend
     env_file: .env
     ports:
       - "8000:80"
     volumes:
-      - static:/var/html/static/
-      - media:/var/html/media/
+      - static:/var/html/static
+      - media:/var/html/media
     depends_on:
       - backend
+      - frontend
+
